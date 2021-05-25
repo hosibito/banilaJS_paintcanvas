@@ -1,10 +1,17 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
+const colors = document.getElementsByClassName("jsColor");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
+
+canvas.height = 700;
+canvas.width = 700;
 
 ctx.strokeStyle = "#2c2c2c";
 ctx.lineWidth = 2.5;
 
 let painting = false;
+let filling = false;
 
 function stopPanting(){
     painting = false;
@@ -22,24 +29,56 @@ function onMouseMove(event){
         ctx.moveTo(x,y);
         console.log(`${x},${y}, ${painting} `)
     }else{
-        ctx.lineTo(x,y);
+        
+        ctx.lineTo(x,y); /* 이전 lineTo 포지션이랑 연결된다. */
         ctx.stroke();
         console.log(`${x},${y}, ${painting} `)
     }
+}
+
+function haneleColorClick(event){
+    // console.log(event);
+    // console.log(event.srcElement.style.backgroundColor);
+    const color = event.target.style.backgroundColor;    
+    ctx.strokeStyle = color;
+}
+
+function handleRangeChange(event){
+    //console.log(event.target.value);
+    const size = event.target.value;
+    ctx.lineWidth = size;
+}
+
+function handleModeClick(){
+    if(filling === true){
+        filling = false;
+        mode.innerText = "채우기";
+    } else {
+        filling = true;
+        mode.innerText = "그리기";
+    }
+
 }
 
 if (canvas) {
     canvas.addEventListener("mousemove",onMouseMove );
     canvas.addEventListener("mousedown",startPanting);
     canvas.addEventListener("mouseup", stopPanting);
-    canvas.addEventListener("mouseleave", stopPanting);
-    
+    canvas.addEventListener("mouseleave", stopPanting);    
 }
 
+//console.log(colors);
+//Array.from(colors).forEach( (color) => console.log(color.style.backgroundColor));
+Array.from(colors).forEach( (color) => color.addEventListener("click", haneleColorClick)   );
 
 
+if (range){
+    range.addEventListener("input", handleRangeChange)
+}
 
-
+if (mode){
+    mode.addEventListener("click", handleModeClick)
+}
 
 // function onMouseMove(event){
 //     const x = event.offsetX;
