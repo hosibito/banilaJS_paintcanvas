@@ -1,4 +1,8 @@
 const canvas = document.getElementById("jsCanvas");
+const ctx = canvas.getContext("2d");
+
+ctx.strokeStyle = "#2c2c2c";
+ctx.lineWidth = 2.5;
 
 let painting = false;
 
@@ -6,23 +10,28 @@ function stopPanting(){
     painting = false;
 }
 
-function onMouseUp(event){
-    stopPanting();
-}
-
-function onMouseDown(event){
-    painting = true;
+function startPanting(){
+    painting= true;
 }
 
 function onMouseMove(event){
     const x = event.offsetX;
     const y = event.offsetY;   
+    if(!painting){
+        ctx.beginPath();
+        ctx.moveTo(x,y);
+        console.log(`${x},${y}, ${painting} `)
+    }else{
+        ctx.lineTo(x,y);
+        ctx.stroke();
+        console.log(`${x},${y}, ${painting} `)
+    }
 }
 
 if (canvas) {
     canvas.addEventListener("mousemove",onMouseMove );
-    canvas.addEventListener("mousedown",onMouseDown);
-    canvas.addEventListener("mouseup", onMouseUp);
+    canvas.addEventListener("mousedown",startPanting);
+    canvas.addEventListener("mouseup", stopPanting);
     canvas.addEventListener("mouseleave", stopPanting);
     
 }
