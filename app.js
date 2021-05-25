@@ -2,12 +2,12 @@ const canvas = document.getElementById("jsCanvas");
 
 let painting = false;
 
-function onMouseLeave(event){
+function stopPanting(){
     painting = false;
 }
 
 function onMouseUp(event){
-    painting = false;
+    stopPanting();
 }
 
 function onMouseDown(event){
@@ -23,7 +23,7 @@ if (canvas) {
     canvas.addEventListener("mousemove",onMouseMove );
     canvas.addEventListener("mousedown",onMouseDown);
     canvas.addEventListener("mouseup", onMouseUp);
-    canvas.addEventListener("mouseleave", onMouseLeave);
+    canvas.addEventListener("mouseleave", stopPanting);
     
 }
 
