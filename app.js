@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const saveBtn = document.getElementById("jsSave");
 
 const INITIAL_COLOR = "#2c2c2c"
 const CANVAS_SIZE = 700
@@ -10,12 +11,14 @@ const CANVAS_SIZE = 700
 canvas.height = CANVAS_SIZE;
 canvas.width = CANVAS_SIZE;
 
+ctx.fillStyle = 'white';
+ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 
-// ctx.fillRect(50,20,100,49);
+
 
 let painting = false;
 let filling = false;
@@ -24,11 +27,14 @@ function stopPanting(){
     painting = false;
 }
 
-function startPanting(){
-    painting= true;
+function startPanting(event){
+    console.log(event.button)
+    if (event.button === 0){
+        painting= true;        
+    }
 }
 
-function onMouseMove(event){
+function onMouseMove(event){    
     const x = event.offsetX;
     const y = event.offsetY;   
     if(!painting){
@@ -73,12 +79,32 @@ function handleCanversClick(){
     }
 }
 
+function handleCM(event){
+    //console.log(event);
+    event.preventDefault();
+}
+
+function handleSaveClick(){
+    const image = canvas.toDataURL("image/jpeg");
+    //console.log(image);
+    const link = document.createElement("a");
+    // link.download = image;
+    // //console.log(link);
+    // link.click();
+    link.href = image;
+    link.download = "PanitJS[EXPORT]";
+    //console.log(link);
+    link.click();
+
+}
+
 if (canvas) {
     canvas.addEventListener("mousemove",onMouseMove );
     canvas.addEventListener("mousedown",startPanting);
     canvas.addEventListener("mouseup", stopPanting);
     canvas.addEventListener("mouseleave", stopPanting);  
     canvas.addEventListener("click", handleCanversClick);  
+    canvas.addEventListener("contextmenu" , handleCM); /* 마우스 오른클릭시 나타나는메뉴 */
 }
 
 //console.log(colors);
@@ -94,6 +120,9 @@ if (mode){
     mode.addEventListener("click", handleModeClick)
 }
 
+if (saveBtn){
+    saveBtn.addEventListener("click", handleSaveClick);
+}
 // function onMouseMove(event){
 //     const x = event.offsetX;
 //     const y = event.offsetY;
