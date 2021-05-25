@@ -4,11 +4,18 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-canvas.height = 700;
-canvas.width = 700;
+const INITIAL_COLOR = "#2c2c2c"
+const CANVAS_SIZE = 700
 
-ctx.strokeStyle = "#2c2c2c";
+canvas.height = CANVAS_SIZE;
+canvas.width = CANVAS_SIZE;
+
+ctx.strokeStyle = INITIAL_COLOR;
+ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
+
+
+// ctx.fillRect(50,20,100,49);
 
 let painting = false;
 let filling = false;
@@ -28,8 +35,7 @@ function onMouseMove(event){
         ctx.beginPath();
         ctx.moveTo(x,y);
         console.log(`${x},${y}, ${painting} `)
-    }else{
-        
+    }else{        
         ctx.lineTo(x,y); /* 이전 lineTo 포지션이랑 연결된다. */
         ctx.stroke();
         console.log(`${x},${y}, ${painting} `)
@@ -41,6 +47,7 @@ function haneleColorClick(event){
     // console.log(event.srcElement.style.backgroundColor);
     const color = event.target.style.backgroundColor;    
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
 }
 
 function handleRangeChange(event){
@@ -57,14 +64,21 @@ function handleModeClick(){
         filling = true;
         mode.innerText = "그리기";
     }
+}
 
+function handleCanversClick(){
+    if(filling){
+        ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
+
+    }
 }
 
 if (canvas) {
     canvas.addEventListener("mousemove",onMouseMove );
     canvas.addEventListener("mousedown",startPanting);
     canvas.addEventListener("mouseup", stopPanting);
-    canvas.addEventListener("mouseleave", stopPanting);    
+    canvas.addEventListener("mouseleave", stopPanting);  
+    canvas.addEventListener("click", handleCanversClick);  
 }
 
 //console.log(colors);
